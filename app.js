@@ -1,5 +1,6 @@
 var util = require('util');
 var fs = require('fs');
+var path = require('path');
 var exec = require('child_process').exec;
 
 var targetDir = '~/.ssh';
