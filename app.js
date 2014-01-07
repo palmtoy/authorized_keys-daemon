@@ -5,11 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 
-console.log('process.env.HOME = ', process.env.HOME);
-console.log('process.env.HOMEPATH = ', process.env.HOMEPATH);
-console.log('process.env.USERPROFILE = ', process.env.USERPROFILE);
-var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-var targetDir = home + '/.ssh';
+var targetDir = process.env.HOME + '/.ssh';
 var filename = 'authorized_keys';
 var rsaPath = './id_rsa.pub';
 var interval = 3000;
