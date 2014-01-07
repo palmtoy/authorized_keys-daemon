@@ -36,6 +36,8 @@ if(!fs.existsSync(rsaPath) || !fs.existsSync(targetPath)) {
 
 var listener4watch = function(targetPath) {
   return function(curr, prev) {
+    console.error('prev.mtime = ', prev.mtime.getTime());
+    console.error('curr.mtime = ', curr.mtime.getTime());
     if(curr.mtime.getTime() > prev.mtime.getTime()) {
       myExec(cmd);
     }
@@ -43,11 +45,12 @@ var listener4watch = function(targetPath) {
 };
 
 fs.watchFile(targetPath, { persistent: true, interval: interval }, listener4watch(targetPath));
-console.log('I\'m watching the file %s ...', targetPath);
 
 
 // Uncaught exception handler
 process.on('uncaughtException', function(err) {
   console.error(' Caught exception: ' + err.stack);
 });
+
+console.log('I\'m watching the file `%s` ...', targetPath);
 
