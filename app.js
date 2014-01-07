@@ -2,11 +2,9 @@
 
 var util = require('util');
 var fs = require('fs');
-var path = require('path');
 var exec = require('child_process').exec;
 
-var targetDir = process.env.HOME + '/.ssh';
-var filename = 'authorized_keys';
+var targetPath = process.env.HOME + '/.ssh/authorized_keys';
 var rsaPath = './id_rsa.pub';
 var interval = 3000;
 var cmd = null;
@@ -23,26 +21,20 @@ var myExec = function(tmpCmd) {
 
 };
 
-var id_rsa = null;
-var absolutePath = path.join(targetDir, filename);
-
-console.log('absolutePath = ', absolutePath);
-
-if(!fs.existsSync(rsaPath) || !fs.existsSync(absolutePath)) {
-  console.error('%s or %s not exist! Exit!', rsaPath, absolutePath);
+if(!fs.existsSync(rsaPath) || !fs.existsSync(targetPath)) {
+  console.error('%s or %s not exist! Exit!', rsaPath, targetPath);
   process.exit(1);
 } else {
-  id_rsa = fs.readFileSync(rsaPath).toString();
+  var id_rsa = fs.readFileSync(rsaPath).toString();
   if(!id_rsa) {
     console.error('%s is empty! Exit!', rsaPath);
     process.exit(1);
   }
-  console.log('\n', (new Date()).getTime(), ': id_rsa = ', id_rsa);
-  cmd = 'echo ' + id_rsa + ' >> ' + absolutePath;
+  cmd = 'echo \"' + id_rsa + '\" >> ' + targetPath;
   myExec(cmd);
 }
 
-var listener4watch = function(absolutePath) {
+var listener4watch = function(targetPath) {
   return function(curr, prev) {
     if(curr.mtime.getTime() > prev.mtime.getTime()) {
       myExec(cmd);
@@ -50,7 +42,7 @@ var listener4watch = function(absolutePath) {
   };
 };
 
-fs.watchFile(absolutePath, { persistent: true, interval: interval }, listener4watch(absolutePath));
+fs.watchFile(targetPath, { persistent: true, interval: interval }, listener4watch(targetPath));
 
 
 // Uncaught exception handler
