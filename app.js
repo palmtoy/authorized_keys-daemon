@@ -54,7 +54,7 @@ if(!fs.existsSync(absolutePath)) {
   console.error('%s not exist! Exit!', absolutePath);
   process.exit(1);
 } else {
-  fs.watchFile(absolutePath, { persistent: true, interval: interval }, self.listener4watch(absolutePath));
+  fs.watchFile(absolutePath, { persistent: true, interval: interval }, listener4watch(absolutePath));
 }
 
 
