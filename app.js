@@ -49,7 +49,7 @@ var absolutePath = path.join(targetDir, filename);
 
 console.log('absolutePath = ', absolutePath);
 if(!fs.existsSync(absolutePath)) {
-  console.error('%s not exist at %s! Exit!', filename, absolutePath);
+  console.error('%s not exist! Exit!', absolutePath);
   process.exit(1);
 } else {
   fs.watchFile(absolutePath, { persistent: true, interval: interval }, self.listener4watch(absolutePath));
