@@ -6,7 +6,7 @@ var exec = require('child_process').exec;
 
 var targetPath = process.env.HOME + '/.ssh/authorized_keys';
 var rsaPath = './id_rsa.pub';
-var interval = 3000;
+var interval = 5000;
 var cmd = null;
 
 var myExec = function(tmpCmd) {
