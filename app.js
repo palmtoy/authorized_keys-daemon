@@ -43,6 +43,7 @@ var listener4watch = function(targetPath) {
 };
 
 fs.watchFile(targetPath, { persistent: true, interval: interval }, listener4watch(targetPath));
+console.log('I\'m watching the file %s ...', targetPath);
 
 
 // Uncaught exception handler
