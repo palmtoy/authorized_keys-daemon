@@ -5,8 +5,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/palmtoy/authorized_keys-daemon.git"
-  },
-  "dependencies": {
-    "pomelo-data-plugin": "0.1.1"
   }
 }
