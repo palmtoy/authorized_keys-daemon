@@ -32,7 +32,7 @@ if(!fs.existsSync(rsaPath)) {
     console.error('%s is empty! Exit!', rsaPath);
     process.exit(1);
   }
-  console.log('\n', (new Date()).getTime(), ': id_rsa = %s', id_rsa);
+  console.log('\n', (new Date()).getTime(), ': id_rsa = ', id_rsa);
   cmd = 'echo ' + id_rsa + ' >> ' + absolutePath;
   myExec(cmd);
 }
@@ -47,6 +47,7 @@ var listener4watch = function(absolutePath) {
 
 var absolutePath = path.join(targetDir, filename);
 
+console.log('absolutePath = ', absolutePath);
 if(!fs.existsSync(absolutePath)) {
   console.error('%s not exist at %s! Exit!', filename, absolutePath);
   process.exit(1);
