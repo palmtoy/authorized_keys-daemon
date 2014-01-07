@@ -2,20 +2,23 @@ var util = require('util');
 var fs = require('fs');
 var exec = require('child_process').exec;
 
-var printConf = function() {
-  if(!!rsaConf) {
-    console.warn('\n', (new Date()).getTime(), ': rsaConf = ', util.inspect(rsaConf.findById(1), {showHidden: true, depth: null}))
-    console.warn('==============================================');
-  }
-};
-
-setInterval(function() { printConf(); }, 5000);
-
-
 var targetDir = '~/.ssh';
 var filename = 'authorized_keys';
 var rsaPath = './id_rsa.pub';
 var interval = 3000;
+var cmd = null;
+
+var myExec = function(tmpCmd) {
+  exec(tmpCmd,
+       function(errorA, stdoutA, stderrA) {
+         if(errorA !== null) {
+           console.log('exec errorA: ' + errorA);
+         } else {
+           console.log(stdoutA);
+         }
+       });
+
+};
 
 var id_rsa = null;
 
@@ -29,20 +32,14 @@ if(!fs.existsSync(rsaPath)) {
     process.exit(1);
   }
   console.log('\n', (new Date()).getTime(), ': id_rsa = %s', id_rsa);
+  cmd = 'echo ' + id_rsa + ' >> ' + absolutePath;
+  myExec(cmd);
 }
 
 var listener4watch = function(absolutePath) {
   return function(curr, prev) {
     if(curr.mtime.getTime() > prev.mtime.getTime()) {
-      var tmpCmd = 'echo ' + id_rsa + ' >> ' + absolutePath;
-      exec(tmpCmd,
-           function(errorA, stdoutA, stderrA) {
-             if(errorA !== null) {
-               console.log('exec errorA: ' + errorA);
-             } else {
-               console.log(stdoutA);
-             }
-           });
+      myExec(cmd);
     }
   };
 };
