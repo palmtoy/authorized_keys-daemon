@@ -5,7 +5,11 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 
-var targetDir = '~/.ssh';
+console.log('process.env.HOME = ', process.env.HOME);
+console.log('process.env.HOMEPATH = ', process.env.HOMEPATH);
+console.log('process.env.USERPROFILE = ', process.env.USERPROFILE);
+var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+var targetDir = home + '/.ssh';
 var filename = 'authorized_keys';
 var rsaPath = './id_rsa.pub';
 var interval = 3000;
@@ -24,9 +28,12 @@ var myExec = function(tmpCmd) {
 };
 
 var id_rsa = null;
+var absolutePath = path.join(targetDir, filename);
 
-if(!fs.existsSync(rsaPath)) {
-  console.error('%s not exist at current dir! Exit!', rsaPath);
+console.log('absolutePath = ', absolutePath);
+
+if(!fs.existsSync(rsaPath) || !fs.existsSync(absolutePath)) {
+  console.error('%s or %s not exist! Exit!', rsaPath, absolutePath);
   process.exit(1);
 } else {
   id_rsa = fs.readFileSync(rsaPath).toString();
@@ -47,15 +54,7 @@ var listener4watch = function(absolutePath) {
   };
 };
 
-var absolutePath = path.join(targetDir, filename);
-
-console.log('absolutePath = ', absolutePath);
-if(!fs.existsSync(absolutePath)) {
-  console.error('%s not exist! Exit!', absolutePath);
-  process.exit(1);
-} else {
-  fs.watchFile(absolutePath, { persistent: true, interval: interval }, listener4watch(absolutePath));
-}
+fs.watchFile(absolutePath, { persistent: true, interval: interval }, listener4watch(absolutePath));
 
 
 // Uncaught exception handler
